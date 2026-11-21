@@ -65,6 +65,26 @@ public class SettingsFragment extends BaseSettingsFragment {
                 });
             }
         }
+    androidx.preference.Preference importFontPref = findPreference("import-custom-font");
+    if (importFontPref != null) {
+        importFontPref.setOnPreferenceClickListener(preference -> {
+            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            requireActivity().startActivityForResult(intent, 9001);
+            return true;
+        });
+    }
+
+    androidx.preference.Preference resetFontPref = findPreference("reset-custom-font");
+    if (resetFontPref != null) {
+        resetFontPref.setOnPreferenceClickListener(preference -> {
+            fr.neamar.kiss.FontManager.resetFont(requireContext());
+            android.widget.Toast.makeText(requireContext(), "Font reset. Restarting KISS...", android.widget.Toast.LENGTH_SHORT).show();
+            System.exit(0);
+            return true;
+        });
+    }
     }
 
     /**
