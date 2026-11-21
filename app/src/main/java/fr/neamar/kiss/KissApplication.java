@@ -100,6 +100,22 @@ public class KissApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        io.github.inflationx.viewpump.ViewPump.init(
+    io.github.inflationx.viewpump.ViewPump.builder()
+        .addInterceptor(chain -> {
+            io.github.inflationx.viewpump.InflateResult result = chain.proceed(chain.request());
+            if (result.view() instanceof android.widget.TextView) {
+                android.graphics.Typeface tf = FontManager.getCustomTypeface(this);
+                if (tf != null) {
+                    android.widget.TextView tv = (android.widget.TextView) result.view();
+                    int style = tv.getTypeface() != null ? tv.getTypeface().getStyle() : android.graphics.Typeface.NORMAL;
+                    tv.setTypeface(tf, style);
+                }
+            }
+            return result;
+        })
+        .build()
+);
         DBHelper.initDatabase(this);
         InterfaceTweaks.setDefaultNightMode(this);
     }

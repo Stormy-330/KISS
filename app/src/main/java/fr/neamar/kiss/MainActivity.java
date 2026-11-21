@@ -182,6 +182,10 @@ public class MainActivity extends AppCompatActivity implements QueryInterface, K
      * Called when the activity is first created.
      */
     @Override
+protected void attachBaseContext(android.content.Context newBase) {
+    super.attachBaseContext(io.github.inflationx.viewpump.ViewPumpContextWrapper.wrap(newBase));
+}
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

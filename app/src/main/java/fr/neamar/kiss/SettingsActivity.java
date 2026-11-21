@@ -67,6 +67,10 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     private MenuItem searchItem;
 
+    @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+    super.attachBaseContext(io.github.inflationx.viewpump.ViewPumpContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,41 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         } else {
             // The search field is collapsed when recreated
             getSupportFragmentManager().popBackStack(SEARCH_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+    android.preference.Preference importFontPref = findPreference("import-custom-font");
+
+    if (importFontPref != null) {
+        importFontPref.setOnPreferenceClickListener(preference -> {
+            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(android.content.Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, 9001);
+            return true;
+        });
+    }
+
+    android.preference.Preference resetFontPref = findPreference("reset-custom-font");
+    if (resetFontPref != null) {
+        resetFontPref.setOnPreferenceClickListener(preference -> {
+            FontManager.resetFont(this);
+            android.widget.Toast.makeText(this, "Font reset. Restarting KISS...", android.widget.Toast.LENGTH_SHORT).show();
+            System.exit(0);
+            return true;
+        });
+    }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 9001 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            boolean success = FontManager.saveFontFromUri(this, data.getData());
+            if (success) {
+                android.widget.Toast.makeText(this, "Font applied! Restarting KISS...", android.widget.Toast.LENGTH_SHORT).show();
+                System.exit(0);
+            } else {
+                android.widget.Toast.makeText(this, "Failed to load font file.", android.widget.Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
