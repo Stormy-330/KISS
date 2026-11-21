@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     app:title="@string/activity_setting">
     <Preference
-        android:key="import-custom-font"
-        android:title="Import Custom Font"
-        android:summary="Select a .ttf or .otf font file" />
+    app:key="import-custom-font"
+    app:title="Import Custom Font"
+    app:summary="Select a .ttf or .otf font file" />
     <Preference
-        android:key="reset-custom-font"
-        android:title="Reset Custom Font"
-        android:summary="Restore default launcher font" />
+        app:key="reset-custom-font"
+        app:title="Reset Custom Font"
+        app:summary="Restore default launcher font" />
     <Preference
         app:fragment="fr.neamar.kiss.settings.AppearanceSettingsFragment"
         app:key="appearance"
